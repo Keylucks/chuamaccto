@@ -1,19 +1,30 @@
 package edu.ilp.chuamaccto.Entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "estudiante")
-@PrimaryKeyJoinColumn(referencedColumnName = "idProfesor")
+@PrimaryKeyJoinColumn(referencedColumnName = "idpersona")
 public class Profesor extends Persona{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column (name = "idprofesor",length = 20,nullable = false)
+    private Long idProfesor;
+
     @Column(name = "salario", length = 10, nullable = false)
     private double salario;
 
+    @OneToOne
+    @JoinColumn(name = "idpersona",referencedColumnName = "idpersona")
+    private Persona persona;
 
+    @ManyToMany
+    @JoinTable(name = "profesorasignatura",joinColumns = @JoinColumn(name = "idprofesor"),
+            inverseJoinColumns = @JoinColumn(name = "idAsig"))
+    private final Set<Asignaturas> asig = new HashSet<>();
 
     public Profesor(Long idPersona, double salario) {
         super(idPersona);
